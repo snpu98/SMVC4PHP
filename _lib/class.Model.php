@@ -85,7 +85,7 @@ class Model extends Database
 	{
 		if( $this->colArr[$this->PKName]==null || $this->colArr[$this->PKName]=='')
 		{
-			logWrite( "'WARN  " .__METHOD__. "() : Primary key value is empty.");
+			logWrite( "WARN  " .__METHOD__. "() : Primary key value is empty.");
 		}
 
 		return $this->colArr[$this->PKName];
@@ -334,22 +334,12 @@ class Model extends Database
 
 			if( $this->save( $query))
 			{
-				$idb = new Database();
-				if( $idb->read( "SELECT LAST_INSERT_ID() as id;"))
-				{
-					$last_id                     = $idb->getRow['id'];
-					$this->colArr[$this->PKName] = $last_id;
+				$last_id                     = $this->insert_id;
+				$this->colArr[$this->PKName] = $last_id;
 
-					logWrite( "INFO  " .__METHOD__. "() : Success => $query");
+				logWrite( "INFO  " .__METHOD__. "() : Success => $last_id / $query");
 
-					return true;
-				}
-				else
-				{
-					logWrite( "ERROR " .__METHOD__. "() : Fail => $query");
-
-					return false;
-				}
+				return true;
 			}
 			else
 			{
